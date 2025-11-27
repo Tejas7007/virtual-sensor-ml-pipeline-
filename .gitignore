@@ -2,6 +2,14 @@
 data/raw/
 data/processed/
 
+# Track PNG images inside reports
+!reports/
+!reports/**/*.png
+
+# Ignore all other report files
+reports/**/*.csv
+reports/**/*.txt
+reports/**/*.log
 
 # Python cache
 __pycache__/
