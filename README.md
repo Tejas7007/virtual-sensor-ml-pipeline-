@@ -1,17 +1,17 @@
 # Virtual Sensor ML Pipeline
 
-A complete machine learning pipeline for modeling **NOx emissions** in a heavy-duty diesel engine using ECU inputs, injection parameters, and thermodynamic sensor data.
+A complete machine learning pipeline for modeling **NOx emissions** in a heavy-duty diesel engine using ECU inputs, injection parameters, thermodynamic sensor data, and air-path actuator signals.
 
 This project includes:
-- Data cleaning
+- Data cleaning & preprocessing
 - Exploratory data analysis
 - Multi-model benchmarking
-- XGBoost virtual sensor training
+- XGBoost virtual NOx sensor
 - SHAP explainability
-- Visualization suite
+- Full visualization suite
 - Reproducible Conda environment
 
-Developed for engine data analysis within the Engine Research Center, UW–Madison.
+Developed for engine data analysis within the **Engine Research Center (ERC)**, UW–Madison.
 
 ---
 
@@ -50,16 +50,16 @@ virtual-sensor-ml-pipeline/
 
 ---
 
-## Installation
+## 1. Installation
 
-### 1. Create the Conda environment
+### Create the Conda environment
 
 ```bash
 conda env create -f environment.yml
 conda activate virtual-sensor
 ```
 
-### 2. Prepare folders
+### Prepare folders
 
 ```bash
 mkdir -p data/raw data/processed reports
@@ -69,42 +69,45 @@ Place the engine dataset files inside `data/raw/`.
 
 ---
 
-## Exploratory Data Analysis (EDA)
-
-Runs type inference, generates previews, and saves summary statistics.
+## 2. Exploratory Data Analysis (EDA)
 
 ```bash
 python src/eda.py
 ```
 
-Outputs (stored in `reports/`):
-- head_preview.csv
-- summary_stats.csv
-- Correlation heatmap (if numeric columns detected)
+This script:
+- Checks data types
+- Generates preview tables
+- Computes summary statistics
+- Creates initial correlation heatmaps
+
+Outputs stored in `reports/`:
+- `head_preview.csv`
+- `summary_stats.csv`
+- `correlation_heatmap_clean.png`
 
 ---
 
-## Data Cleaning
-
-Processes the dataset and removes unusable rows/columns.
+## 3. Data Cleaning
 
 ```bash
 python src/clean_data.py
 ```
 
-This script:
-- Computes NaN fraction for every column
-- Drops high-NaN columns
-- Saves cleaned dataset to `engine_clean.csv`
-- Generates correlation heatmap using cleaned data
+This step:
+- Computes NaN fraction per column
+- Removes high-NaN columns
+- Drops invalid or incomplete engine operating points
+- Ensures numeric consistency
+- Produces correlation heatmap on cleaned data
 
-Outputs appear in `data/processed/` and `reports/`.
+Outputs appear in:
+- `data/processed/engine_clean.csv`
+- `reports/`
 
 ---
 
-## Virtual Sensor Training (XGBoost)
-
-Main ML model used for NOx prediction.
+## 4. Virtual NOx Sensor — XGBoost Model
 
 ```bash
 python src/train_model.py
@@ -112,43 +115,41 @@ python src/train_model.py
 
 Produces:
 - Train/validation R² and RMSE
-- Feature importance plot
+- Feature importance (gain-based)
 - SHAP beeswarm plot
 - Predicted vs True scatter
 - Residual diagnostics
 
-Artifacts saved in `reports/`.
+Stored in `reports/`.
 
 ---
 
-## Model Benchmarking
+## 5. Model Benchmarking
 
-Compares multiple regression models:
+Models compared:
 - Dummy Mean
 - Linear Regression
 - Ridge Regression
 - Random Forest
-- XGBoost
+- XGBoost (best)
 
 ```bash
 python src/compare_models.py
 ```
 
 Outputs:
-- model_comparison_NOx_EO.csv
+- `model_comparison_NOx_EO.csv`
 - Validation R² bar chart
 
 ---
 
-## Visualization Suite
-
-Generates domain-specific diagnostic plots for NOx behavior.
+## 6. Visualization Suite
 
 ```bash
 python src/visualize_data.py
 ```
 
-Produces:
+Produces domain-specific engineering diagnostic plots:
 - NOx distribution
 - NOx vs Rail Pressure
 - NOx vs EGR Rate
@@ -158,7 +159,7 @@ Produces:
 - Residuals vs Predicted
 - SHAP bar plot
 
-Plots saved under `reports/visualizations/`.
+All plots saved under `reports/visualizations/`.
 
 ---
 
@@ -184,22 +185,88 @@ Plots saved under `reports/visualizations/`.
 
 ---
 
-## Why XGBoost?
+## Why This Problem Matters
 
-XGBoost was the highest-performing model due to:
-- Ability to capture nonlinear combustion behavior
-- Robustness with correlated physical variables
-- Strong accuracy on structured sensor data
-- Native integration with SHAP interpretability
+Physical NOx sensors:
+- Are expensive
+- Degrade over time
+- Have significant measurement delay (1–2 seconds)
+- Require costly calibration
 
-Performance on this dataset:
-- Validation R²: **0.9967**
-- Validation RMSE: **21.55**
+Modern engines need real-time, control-oriented NOx estimation. A **virtual sensor** solves this with zero hardware cost.
+
+NOx depends on complex interactions between:
+- Air–fuel ratio
+- Rail pressure
+- Injection phasing
+- Boost & manifold dynamics
+- EGR dilution
+- In-cylinder temperature
+
+Machine learning can learn these nonlinear patterns far better than simple calibration maps.
 
 ---
 
-## Notes
+## Scientific Insights From the Data
 
-- Raw datasets are intentionally excluded from version control.
-- All plots, metrics, and artifacts are generated automatically.
-- The project is reproducible through the provided `environment.yml`.
+### 🔥 What Drives NOx Up?
+
+- Higher rail pressure
+- Lower EGR rate
+- More main-fuel quantity
+- Advanced combustion phasing
+- Higher boost temperature
+
+These raise peak flame temperature, increasing thermal NOx via the **Zeldovich mechanism**.
+
+### 🌬️ What Drives NOx Down?
+
+- Higher EGR rate
+- Retarded pilot/main injection
+- Cooler intake charge
+
+EGR reduces oxygen and peak combustion temperature, producing lower NOx.
+
+### 📉 Why Linear Models Failed
+
+Linear/Ridge Regression achieved only ~0.98 R² because:
+- NOx–EGR is exponential
+- NOx–rail pressure is nonlinear
+- Multiple variables interact (multiplicative effects)
+- Diesel combustion has strong threshold behavior
+
+Linear models cannot capture these physics.
+
+### 🚀 Why XGBoost Worked Perfectly
+
+XGBoost handles:
+- Nonlinear temperature relationships
+- Multiplicative feature interactions
+- Actuator threshold behaviors
+- Correlated sensor signals
+- Sparse features
+
+It also provides:
+- Transparent feature importance
+- SHAP interpretability
+- Robust generalization
+
+**Result:**
+- **Validation R²:** 0.9967
+- **Validation RMSE:** 21.55
+
+This is exceptionally high for real engine data.
+
+---
+
+## Summary
+
+This repository provides a fully reproducible, interpretable, physics-aware virtual NOx sensor pipeline, including:
+- Rigorous EDA
+- Robust data cleaning
+- Multi-model comparison
+- State-of-the-art XGBoost modeling
+- Full SHAP explainability
+- Comprehensive visualization suite
+
+It is designed for combustion researchers, emissions control engineers, and anyone interested in ML for engine systems.
