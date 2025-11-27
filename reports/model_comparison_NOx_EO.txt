@@ -1,0 +1,7 @@
+Model comparison for NOx_EO
+
+XGBoost: Train R2=1.0000, Val R2=0.9967, Train RMSE=1.1582, Val RMSE=21.5538
+RandomForest: Train R2=0.9963, Val R2=0.9883, Train RMSE=18.2485, Val RMSE=40.4369
+Ridge: Train R2=0.9867, Val R2=0.9870, Train RMSE=34.5991, Val RMSE=42.7177
+LinearRegression: Train R2=0.9895, Val R2=0.9801, Train RMSE=30.8194, Val RMSE=52.7409
+DummyMean: Train R2=0.0000, Val R2=-0.0320, Train RMSE=300.0702, Val RMSE=379.8958

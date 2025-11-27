@@ -1,0 +1,27 @@
+Unnamed: 0,Unnamed: 1,Unnamed: 2,Unnamed: 3,Unnamed: 4,Unnamed: 5,Unnamed: 6,Unnamed: 7,Unnamed: 8
+,Input,Unit Group,Description,,,,,
+,P_IM_A,Pressure,Absolute intake manifold pressure,,,,,
+,T_IM,Temperature,Intake manifold temperature,,,,,
+,N,Angular Velocity,Engine speed,,,,,
+,P_31_A,Pressure,Absolute exhaust manifold pressure,,,,No of cylinders,
+,LAV_IM,Ratio,Excess air ratio in the intake manifold,,,,Bore  ,mm
+,phiMI,Angle,Timing of main injection relative to FTDC (Firing Top Dead Center),,,,Stroke,mm
+,qMI,Mass,Quantity of main injection,,,,Compression ratio,-
+,pRail,Pressure,Rail pressure,,,,Conrod length ,mm
+,MIET,Time,Duration of main injection,,,,No of holes in injector nozzle,-
+,Delivery,Ratio,RatioDelivery ratio of the engine,,,,Nozzle flow rate ,ms
+,T_W_O,Temperature,Water temperature,,,,Hydraulic delay opening,ms
+,T_OIl,Temperature,Oil temperature,,,,Hydraulic delay closing,ms
+,qPoE,Mass,Quantity of early post injection,,,,,
+,phiPoE,Angle,Timing of early post injection relative to FTDC,,,,,
+,qPoL,Mass,Quantity of late post injection,,,,,
+,qPil1,Mass,Quantity of first pilot injection,,,,,
+,qPil2,Mass,Quantity of second pilot injection,,,,,
+,phiPil1,Angle,Timing of first pilot injection relative to FTDC,,,,,
+,phiPil2,Angle,Timing of second pilot injection relative to FTDC,,,,,
+,Swirl,Ratio,Intake swirl valve position,,,,,
+,BMEP,Pressure,Brake specific mean effective pressure,,,,,
+,P_SOI,Pressure,Absolute pressure at start of injection,,,,,
+,SOC,Angle,Start of combustion relative to FTDC,,,,,
+,MFB50,Angle,Center of combustion relative to FTDC,,,,,
+,NOx,Ratio,NOx emissions,,,,,

@@ -1,0 +1,6 @@
+Target: NOx_EO
+Features: 50
+Train R2:  1.0000
+Val R2:    0.9967
+Train RMSE:1.1582
+Val RMSE:  21.5538
