@@ -2,8 +2,6 @@
 data/raw/
 data/processed/
 
-# Ignore auto-generated plots and reports
-reports/
 
 # Python cache
 __pycache__/
