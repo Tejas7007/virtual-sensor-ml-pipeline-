@@ -1,0 +1,17 @@
+# Ignore raw and processed data
+data/raw/
+data/processed/
+
+# Ignore auto-generated plots and reports
+reports/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# MacOS metadata
+.DS_Store
+
+# Jupyter notebooks checkpoints
+*.ipynb_checkpoints
+

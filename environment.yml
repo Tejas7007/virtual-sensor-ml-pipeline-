@@ -1,0 +1,23 @@
+name: virtual-sensor
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.11
+  - numpy
+  - pandas
+  - scipy
+  - scikit-learn
+  - matplotlib
+  - seaborn
+  - statsmodels
+  - jupyterlab
+  - ipykernel
+  - openpyxl
+  - pyarrow
+  - pip
+  - pip:
+      - shap
+      - xgboost
+      - ydata-profiling
+
